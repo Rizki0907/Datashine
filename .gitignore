@@ -1,6 +1,13 @@
-# Data
-data/
-*.csv
+# Abaikan semua file di folder data
+data/*
+!data/.gitkeep
+!data/raw/
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/data_pendukung/
+data/raw/data_pendukung/*
+!data/raw/data_pendukung/.gitkeep
+
 
 # Python
 __pycache__/
