@@ -31,5 +31,10 @@ archive_scripts/
 *.docx
 *.pdf
 
+# Ignore preliminary experiment notebooks (only keep official final notebook)
+notebooks/*
+!notebooks/Datashine_Notebook.ipynb
+
+
 
 
