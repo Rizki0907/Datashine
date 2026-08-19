@@ -7,12 +7,12 @@ import {
 
 export default function ReportTab() {
   const steps = [
-    { title: "1. Akuisisi Data Multidimensi", desc: "Data historis TMA 30 stasiun, data iklim makro/mikro (ENSO, MJO, curah hujan, kelembaban tanah), dan koordinat geospasial pos." },
-    { title: "2. Pra-Pemrosesan & Resampling", desc: "Interpolasi linier variabel dinamis, forward/backward fill iklim makro, dan agregasi terstandar ke resolusi 6 jam." },
-    { title: "3. Sinkronisasi Fisika Sungai", desc: "Konstruksi matriks limpasan air hujan efektif (Rainfall × Soil Moisture) dan akumulasi global pivot berjalan 1D hingga 7D." },
-    { title: "4. Jangkar Spasial Haversine", desc: "Perhitungan matriks jarak geodesic 30 pos dan pembobotan eksponensial (Radius = 30 KM) untuk membentuk vektor anchor." },
-    { title: "5. Normalisasi Target Berbasis Pos", desc: "Transformasi Z-score per stasiun guna mengeliminasi disparitas datum elevasi alami antar-pos hulu dan hilir." },
-    { title: "6. Optimasi Optuna & 5-Fold CV", desc: "Bayesian Optimization 75 trials untuk hyperparameter LightGBM dan evaluasi 5-Fold Cross Validation yang tangguh." }
+    { title: "1. Akuisisi Data Multidimensi", desc: "Data historis TMA 30 stasiun BBWS Bengawan Solo (Jan 2023 - Mei 2026), variabel lingkungan resolusi per jam, dan indeks iklim makro (MJO, Niño 3.4)." },
+    { title: "2. Pra-Pemrosesan & Resampling", desc: "Agregasi variabel lingkungan ke resolusi standar 6 jam, interpolasi linier kelembapan tanah, serta sinkronisasi iklim makro via forward/backward fill." },
+    { title: "3. Sinkronisasi Fisika Sungai", desc: "Konstruksi curah hujan efektif (Rainfall × Soil Moisture Level 1) dan global pivot matrices untuk akumulasi hujan multi-stasiun (1D, 2D, 3D, 7D)." },
+    { title: "4. Jangkar Spasial Haversine", desc: "Perhitungan matriks jarak geodesic 30 pos pemantauan dan pembobotan eksponensial (Radius D = 30 KM) untuk merepresentasikan rambatan aliran hulu-ke-hilir." },
+    { title: "5. Normalisasi Target Z-Score", desc: "Transformasi Z-score per stasiun guna menstandarisasi skala prediksi lintas stasiun tanpa terdistorsi oleh perbedaan datum elevasi dasar alami." },
+    { title: "6. Optimasi Optuna & 5-Fold CV", desc: "Optimasi hiperparameter Bayesian (75 trials, TPE sampler) dengan validasi 5-Fold Cross Validation dan ensemble bagging rata-rata 5 model." }
   ];
 
   return (
@@ -22,7 +22,7 @@ export default function ReportTab() {
       <div className="glass-panel p-6 sm:p-8 rounded-2xl border dark:border-white/10 border-slate-200 relative overflow-hidden">
         <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 mb-2">
           <BookOpen className="w-5 h-5" />
-          <span className="text-xs font-mono font-bold uppercase tracking-widest">Abstrak Makalah Ilmiah</span>
+          <span className="text-xs font-mono font-bold uppercase tracking-widest">Abstrak Makalah Ilmiah (SSDS 2026)</span>
         </div>
         
         <h3 className="text-xl sm:text-2xl font-bold dark:text-white text-slate-900 mb-4 leading-snug">
@@ -31,16 +31,16 @@ export default function ReportTab() {
 
         <div className="space-y-3 text-xs sm:text-sm dark:text-slate-300 text-slate-700 leading-relaxed text-justify">
           <p>
-            Prediksi Tinggi Muka Air (TMA) sungai yang akurat memegang peranan krusial dalam sistem peringatan dini banjir dan manajemen sumber daya air terpadu, khususnya pada Wilayah Sungai Bengawan Solo dan Kali Lamong yang memiliki dinamika hidrologis non-linier. Penelitian ini mengajukan arsitektur pemodelan prediktif berbasis <em>Light Gradient Boosting Machine</em> (LightGBM) yang mengintegrasikan rekayasa fitur bertingkat: <strong>Jangkar Spasial Haversine</strong> (<em>Spatial Anchor</em>, Radius = 30 KM), <strong>Peluruhan Temporal Eksplisit</strong> (<em>Explicit Temporal Decay</em> &tau; = 24 jam &amp; 168 jam), serta <strong>Matriks Limpasan Hujan Efektif</strong> (<em>Effective Rain</em>).
+            Prediksi Tinggi Muka Air (TMA) sungai secara akurat merupakan komponen krusial dalam mitigasi risiko banjir di Daerah Aliran Sungai (DAS) Bengawan Solo, sungai terbesar di Pulau Jawa yang melintasi Jawa Tengah dan Jawa Timur, terutama saat periode pergantian musim yang dipengaruhi oleh anomali iklim makro seperti ENSO dan MJO. Penelitian ini mengembangkan pendekatan prediksi TMA multi-stasiun pada 30 pos pemantauan BBWS Bengawan Solo (Januari 2023 – Mei 2026) berbasis gradient boosting dengan model LightGBM, yang diintegrasikan dengan dua inovasi rekayasa fitur utama: <strong>Haversine Spatial Anchor</strong>, yaitu nilai jangkar historis TMA dari stasiun-stasiun terdekat yang dibobotkan berdasarkan peluruhan eksponensial jarak geografis (<em>spatial decay</em>, $D = 30\text{ km}$), dan <strong>Peluruhan Temporal Eksplisit</strong> (<em>explicit temporal decay</em>) yang memodelkan pengaruh kondisi historis jangka pendek ($\tau = 24\text{ jam}$) dan jangka panjang ($\tau = 168\text{ jam}$) terhadap TMA saat ini.
           </p>
           <p>
-            Melalui normalisasi target adaptif per pos pengamatan dan penalti pembobotan sampel dinamis (<em>Dynamic Sample Weighting</em>) pada stasiun beranomali tinggi (Babat dan Bojonegoro), model berhasil menekan deviasi lokal secara signifikan tanpa mengorbankan stabilitas global. Evaluasi empiris 5-Fold Cross Validation menghasilkan rata-rata RMSE sebesar $2.11892 \pm 0.845$, dan berhasil membukukan skor kompetisi <strong>Private RMSE 1.42078</strong> (Public RMSE 0.63839) pada babak penyisihan Sebelas Maret Statistics Data Science (SSDS) 2026, membuktikan keandalan dan generalisasi model terhadap data tak terlihat.
+            Selain itu, diterapkan konstruksi fitur <em>effective rain</em> (interaksi curah hujan dan kelembapan tanah), rolling akumulasi curah hujan multi-stasiun melalui <em>global pivot matrices</em>, serta normalisasi target berbasis Z-score per stasiun untuk menyeragamkan skala prediksi antar pos pengamatan. Optimasi hiperparameter dilakukan menggunakan Optuna (75 trials, TPE sampler) dengan validasi 5-Fold Cross-Validation. Hasil evaluasi pada platform Kaggle menunjukkan model yang dikembangkan memperoleh Root Mean Squared Error (RMSE) sebesar <strong>1.42078</strong> pada data privat dan <strong>0.63839</strong> pada data publik. Hasil analisis feature importance menunjukkan bahwa fitur jangkar spasial dan peluruhan temporal memberikan kontribusi signifikan terhadap akurasi prediksi, mengonfirmasi bahwa integrasi informasi hidrologi antar-stasiun berbasis jarak geografis mampu menangkap pola aliran air hulu-hilir yang tidak tertangkap oleh fitur temporal semata.
           </p>
         </div>
 
         <div className="mt-6 pt-4 border-t dark:border-white/10 border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs font-mono dark:text-slate-400 text-slate-600">
           <div>
-            <strong className="dark:text-slate-200 text-slate-800">Kata Kunci:</strong> Tinggi Muka Air, LightGBM, Haversine Spatial Anchor, Temporal Decay, Effective Rain, Bengawan Solo.
+            <strong className="dark:text-slate-200 text-slate-800">Kata Kunci:</strong> Prediksi Tinggi Muka Air, LightGBM, Haversine Spatial Anchor, Peluruhan Temporal, Hidrologi, ENSO-MJO.
           </div>
           <div className="text-cyan-600 dark:text-cyan-400 font-bold">
             Format: IEEE Conference Template (Maks. 11 Halaman)
@@ -85,7 +85,7 @@ export default function ReportTab() {
           </div>
 
           <div className="p-4 rounded-xl dark:bg-slate-950 bg-slate-900 text-slate-200 border border-slate-800 font-mono text-xs space-y-2 shadow-inner">
-            <p className="text-slate-400"># 1. Download notebook resmi dari repositori tim</p>
+            <p className="text-slate-400"># 1. Unduh repositori resmi tim Datashine</p>
             <p className="text-cyan-300">git clone https://github.com/Rizki0907/Datashine.git</p>
             <p className="text-slate-400 mt-2"># 2. Buka dan jalankan Datashine_Notebook.ipynb</p>
             <p className="text-emerald-400">!pip install -U gdown optuna lightgbm</p>
@@ -128,7 +128,7 @@ export default function ReportTab() {
 
           <div className="mt-4 pt-3 border-t dark:border-white/10 border-slate-200 text-center">
             <span className="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 font-semibold">
-              Sebelas Maret Statistics Fair (SSF) • HIMASTA UNS 2026
+              Sebelas Maret Statistics Data Science (SSDS) • HIMASTA UNS 2026
             </span>
           </div>
         </div>

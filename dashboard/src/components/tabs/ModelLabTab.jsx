@@ -64,7 +64,7 @@ export default function ModelLabTab() {
           </div>
 
           <div className="mt-4 p-3.5 rounded-xl inner-card text-[11px] dark:text-slate-400 text-slate-600 space-y-1">
-            <p><strong className="dark:text-slate-200 text-slate-800">Justifikasi Ilmiah:</strong> Variansi antar-fold (1.00 vs 3.14) terjadi karena pembagian sampel secara acak pada stasiun anomali tinggi (Babat/Bengkelolor). Skor kompetisi Kaggle Private (<strong>1.42078</strong>) yang sangat presisi membuktikan model mampu melakukan generalisasi dengan baik pada data unseen.</p>
+            <p><strong className="dark:text-slate-200 text-slate-800">Justifikasi Ilmiah:</strong> Sebagaimana dianalisis pada Bab IV Makalah, skema validasi 5-Fold dengan pengacakan menghasilkan rentang RMSE (1.001 s.d. 3.142 mdpl) akibat variabilitas sebaran presipitasi ekstrem di tiap lipatan. Skor kompetisi Kaggle Private (<strong>1.42078</strong>) membuktikan kapasitas generalisasi model yang kuat dan konsisten terhadap data tak terlihat (<em>unseen test set</em>).</p>
           </div>
         </div>
 
