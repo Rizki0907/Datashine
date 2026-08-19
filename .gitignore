@@ -19,3 +19,19 @@ __pycache__/
 # Virtual Environment
 venv/
 env/
+
+# Dashboard Node Modules & Build
+dashboard/node_modules/
+dashboard/dist/
+*.local
+
+# Ignore heavy ML models, assets & big submissions
+dashboard_assets/
+submissions/
+archive_scripts/
+*.docx
+*.pdf
+scraper_bbws_selenium_result.csv
+
+
+
